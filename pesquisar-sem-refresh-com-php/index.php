@@ -15,9 +15,9 @@
 		<input type="text" name="pesquisa" id="pesquisa" placeholder="Digite o nome do usuário">
 	</form>
 
-	<ul class="resultado">
+	<ol class="resultado">
 
-	</ul>
+	</ol>
 
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
 	<script type="text/javascript" src="personalizado.js"></script>

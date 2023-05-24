@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Xadrez</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #board {
+            width: 640px;
+            height: 640px;
+            display: flex;
+            flex-wrap: wrap;
+            border: 1px solid #888;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .square {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            cursor: pointer;
+        }
+
+        .white {
+            background-color: #f2f2f2;
+        }
+
+        .black {
+            background-color: #999;
+        }
+
+        .piece {
+            user-select: none;
+        }
+
+        .piece.selected {
+            border: 2px solid yellow;
+        }
+    </style>
+</head>
+<body>
+    <div id="board"></div>
+
+    <script>
+        const board = document.getElementById("board");
+        const squares = [];
+        let selectedPiece = null;
+        let currentPlayer = "white";
+
+        // Função para criar o tabuleiro de xadrez
+        function createBoard() {
+            let isWhite = true;
+
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const square = document.createElement("div");
+                    square.classList.add("square");
+                    square.classList.add(isWhite ? "white" : "black");
+
+                    // Adiciona o evento de clique em cada quadrado
+                    square.addEventListener("click", () => {
+                        handleSquareClick(row, col);
+                    });
+
+                    board.appendChild(square);
+                    squares.push(square);
+                    isWhite = !isWhite;
+                }
+                isWhite = !isWhite;
+            }
+        }
+
+        // Função para lidar com o clique em um quadrado
+        function handleSquareClick(row, col) {
+            const piece = squares[row * 8 + col];
+
+            if (selectedPiece) {
+                if (selectedPiece === piece) {
+                    deselectPiece();
+                } else {
+                    movePiece(piece, row, col);
+                }
+            } else {
+                if (piece.innerText !== "") {
+                    selectPiece(piece);
+                }
+            }
+        }
+
+        // Função para selecionar uma peça
+        function selectPiece(piece) {
+            deselectPiece();
+            selectedPiece = piece;
+            selectedPiece.classList.add("selected");
+        }
+
+        // Função para desselecionar uma peça
+        function deselectPiece() {
+            if (selectedPiece) {
+                selectedPiece.classList.remove("selected");
+                selectedPiece = null;
+            }
+        }
+
+        // Função para mover uma peça
+        function movePiece(targetSquare, row, col) {
+            if (isValidMove(row, col)) {
+                targetSquare.innerText = selectedPiece.innerText;
+                selectedPiece.innerText = "";
+                deselectPiece();
+                currentPlayer = currentPlayer === "white" ? "black" : "white";
+            }
+        }
+
+        // Função para verificar se o movimento é válido
+        function isValidMove(row, col) {
+            // Implemente aqui a lógica das regras de movimentação do xadrez
+            // Este exemplo permite mover peças livremente sem restrições
+            return true;
+        }
+
+        // Função para adicionar as peças no tabuleiro
+        function addChessPieces() {
+            const piecesOrder = ["T", "C", "B", "RE", "RA", "B", "C", "T"];
+
+            for (let col = 0; col < 8; col++) {
+                const pawn = createPiece("P");
+                squares[col].appendChild(pawn);
+
+                const piece = createPiece(piecesOrder[col]);
+                squares[7 * 8 + col].appendChild(piece);
+            }
+        }
+
+        // Função para criar uma peça
+        function createPiece(type) {
+            const piece = document.createElement("span");
+            piece.classList.add("piece");
+            piece.innerText = type;
+            return piece;
+        }
+
+        // Chamada das funções para criar o tabuleiro e adicionar as peças
+        createBoard();
+        addChessPieces();
+    </script>
+</body>
+</html>
